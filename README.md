@@ -57,18 +57,18 @@ Add an object to `profile.projects`:
   role: "Sole engineer",
   featured: false,                  // the first featured project gets the large card
   stack: ["n8n", "Python", "PostgreSQL"],
-  links: { live: "https://…", github: "https://github.com/…" },  // either is optional
+  links: { live: "https://…", github: "https://github.com/…", fiverr: "https://…" }, // all optional
   cover: { src: "/projects/invoice-bot/cover.jpg", alt: "Dashboard showing …" },
   problem: "…",
   approach: ["…", "…"],             // one paragraph per entry
   result: "…",
-  gallery: [{ src: "/projects/invoice-bot/1.jpg", alt: "…" }],
+  gallery: [],                      // optional screenshots; leave empty for none
+  // galleryLayout: "phone",        // show the gallery as mobile screens (see Ulysse)
 }
 ```
 
-Put images in `public/projects/<slug>/`. They're shown in grayscale to keep the palette
-monochrome. The current covers are grayscale placeholders from picsum.photos; once all
-are replaced you can remove the `images.remotePatterns` entry in `next.config.ts`.
+Put images in `public/projects/<slug>/`. Covers are 16:9 marketing images and show in
+full color; the cards keep that shape so headlines aren't cropped.
 
 The case study page, sitemap entry and static params are generated from this list.
 
@@ -122,10 +122,10 @@ Profile, experience and education are filled in from the CV. What's left:
 - [ ] Optional: company URLs in `experience` (`companyUrl`) and certifications
 
 **Projects**
-- [ ] Real screenshots for every project (covers and galleries are grayscale placeholders),
-      with alt text
 - [ ] Live / GitHub links where they exist (all hidden for now)
-- [ ] Real estate sales agent: year, your role, exact stack
+- [ ] Years for the four automation projects (restaurant agent, real estate agent,
+      accounting documents, LinkedIn content); hidden on the site until set
+- [ ] Accounting documents and LinkedIn content: exact tools (workflow engine, OCR, model)
 - [ ] Law firm platform: result after launch
 - [ ] Building automation scheduler: problem, how it fits together, result
 - [ ] Hospitality platform and building scheduler: confirm the stack (copied from the

@@ -4,7 +4,7 @@ import Link from "next/link"
 import { ArrowUpRight } from "lucide-react"
 
 import type { Project } from "@/data/profile"
-import { cn } from "@/lib/utils"
+import { cn, filled } from "@/lib/utils"
 import { ShineBorder } from "@/components/magicui/shine-border"
 import { ProjectLinks } from "@/components/project-links"
 import { Badge } from "@/components/ui/badge"
@@ -35,7 +35,7 @@ export function ProjectCard({ project, featured, aspect, sizes, className }: Pro
                 alt={project.cover.alt}
                 fill
                 sizes={sizes}
-                className="object-cover grayscale transition-transform duration-700 ease-(--ease-out-expo) group-hover:scale-[1.03]"
+                className="object-cover transition-transform duration-700 ease-(--ease-out-expo) group-hover:scale-[1.03]"
               />
             </div>
           </ViewTransition>
@@ -61,8 +61,12 @@ export function ProjectCard({ project, featured, aspect, sizes, className }: Pro
           <div className="flex flex-col gap-2">
             <p className="font-mono text-xs text-muted-foreground">
               {project.kind}
-              <span className="mx-2">·</span>
-              {project.year}
+              {filled(project.year) && (
+                <>
+                  <span className="mx-2">·</span>
+                  {project.year}
+                </>
+              )}
             </p>
             <h3
               className={cn(

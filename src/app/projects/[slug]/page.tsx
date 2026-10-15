@@ -79,7 +79,7 @@ function ProjectSkeleton() {
           <div key={i} className={cn(bar, "h-9")} />
         ))}
       </div>
-      <div className={cn(bar, "mt-12 aspect-[4/3] rounded-2xl md:mt-16 md:aspect-[2/1]")} />
+      <div className={cn(bar, "mt-12 aspect-video rounded-2xl md:mt-16")} />
     </div>
   )
 }
@@ -114,11 +114,12 @@ async function ProjectContent({ params }: { params: Params }) {
   if (!project) notFound()
 
   const next = getNextProject(project.slug)
+  // Placeholder values are left out rather than shown as "[FILL IN ...]"
   const meta = [
     { label: "Role", value: project.role },
     { label: "Type", value: project.kind },
     { label: "Year", value: project.year },
-  ]
+  ].filter((item) => filled(item.value))
 
   return (
     <>
@@ -128,8 +129,12 @@ async function ProjectContent({ params }: { params: Params }) {
             <div className="col-span-12 lg:col-span-9">
               <p className="hero-fade font-mono text-xs text-muted-foreground">
                 {project.kind}
-                <span className="mx-2">·</span>
-                {project.year}
+                {filled(project.year) && (
+                  <>
+                    <span className="mx-2">·</span>
+                    {project.year}
+                  </>
+                )}
               </p>
               <h1
                 className="hero-fade mt-5 text-[clamp(2.5rem,7vw,6rem)] leading-[0.95] font-semibold tracking-[-0.05em]"
@@ -160,7 +165,9 @@ async function ProjectContent({ params }: { params: Params }) {
               <dt className="text-xs text-muted-foreground">Links</dt>
               <dd>
                 <ProjectLinks project={project} />
-                {!filled(project.links.live) && !filled(project.links.github) && (
+                {!filled(project.links.live) &&
+                  !filled(project.links.github) &&
+                  !filled(project.links.fiverr) && (
                   <span className="text-sm text-muted-foreground">Private</span>
                 )}
               </dd>
@@ -170,14 +177,14 @@ async function ProjectContent({ params }: { params: Params }) {
 
         <div className="container-page mt-12 md:mt-16">
           <ViewTransition name={`project-${project.slug}`} share="morph" default="none">
-            <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-border bg-muted md:aspect-[2/1]">
+            <div className="relative aspect-video w-full overflow-hidden rounded-2xl border border-border bg-muted">
               <Image
                 src={project.cover.src}
                 alt={project.cover.alt}
                 fill
                 priority
                 sizes="(min-width: 1264px) 1200px, 100vw"
-                className="object-cover grayscale"
+                className="object-cover"
               />
             </div>
           </ViewTransition>
@@ -208,7 +215,39 @@ async function ProjectContent({ params }: { params: Params }) {
           </Block>
         </div>
 
-        {project.gallery.length > 0 && (
+        {project.gallery.length > 0 && project.galleryLayout === "phone" && (
+          <section aria-label="App screens" className="container-page mt-8">
+            <div className="line-grid relative overflow-hidden rounded-2xl border border-border bg-muted/40 px-4 py-10 md:px-10 md:py-16">
+              <ul className="relative grid grid-cols-2 gap-x-4 gap-y-10 md:grid-cols-4 md:gap-x-8">
+                {project.gallery.map((image, i) => (
+                  <BlurFade
+                    as="li"
+                    key={image.src}
+                    delay={i * 0.08}
+                    className={cn("flex flex-col gap-4", i % 2 === 1 && "md:mt-16")}
+                  >
+                    <div className="relative aspect-[1320/2868] overflow-hidden rounded-[1.75rem] border border-border-strong bg-background shadow-[0_24px_60px_-24px_rgb(0_0_0/0.45)]">
+                      <Image
+                        src={image.src}
+                        alt={image.alt}
+                        fill
+                        sizes="(min-width: 768px) 280px, 45vw"
+                        className="object-cover"
+                      />
+                    </div>
+                    {image.caption && (
+                      <p className="text-center font-mono text-xs text-muted-foreground">
+                        {image.caption}
+                      </p>
+                    )}
+                  </BlurFade>
+                ))}
+              </ul>
+            </div>
+          </section>
+        )}
+
+        {project.gallery.length > 0 && project.galleryLayout !== "phone" && (
           <section aria-label="Gallery" className="container-page mt-8 grid grid-cols-12 gap-4 md:gap-6">
             {project.gallery.map((image, i) => (
               <BlurFade
@@ -224,7 +263,7 @@ async function ProjectContent({ params }: { params: Params }) {
                   alt={image.alt}
                   fill
                   sizes="(min-width: 768px) 60vw, 100vw"
-                  className="object-cover grayscale"
+                  className="object-cover"
                 />
               </BlurFade>
             ))}

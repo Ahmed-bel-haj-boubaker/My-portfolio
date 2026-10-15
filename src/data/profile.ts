@@ -36,7 +36,13 @@ export type TechIcon =
   | "vercel"
   | "n8n"
   | "ollama"
-  | "whatsapp";
+  | "whatsapp"
+  | "livekit"
+  | "mcp"
+  | "hubspot"
+  | "googlesheets"
+  | "googlecalendar"
+  | "telegram";
 
 export type Tech = { name: string; icon: TechIcon };
 
@@ -67,7 +73,7 @@ export type Education = {
   period: string;
 };
 
-export type ProjectImage = { src: string; alt: string };
+export type ProjectImage = { src: string; alt: string; caption?: string };
 
 export type Project = {
   slug: string;
@@ -78,12 +84,14 @@ export type Project = {
   role: string;
   featured?: boolean;
   stack: string[];
-  links: { live?: string; github?: string };
+  links: { live?: string; github?: string; fiverr?: string };
   cover: ProjectImage;
   problem: string;
   approach: string[];
   result: string;
   gallery: ProjectImage[];
+  /** "phone" shows the gallery as a row of mobile screenshots */
+  galleryLayout?: "phone";
 };
 
 export type Social = {
@@ -92,9 +100,7 @@ export type Social = {
   icon: "linkedin" | "github" | "fiverr" | "email";
 };
 
-/** Placeholder imagery: grayscale picsum photos. Replace with real screenshots. */
-const placeholderImage = (seed: string, w = 1600, h = 1000) =>
-  `https://picsum.photos/seed/${seed}/${w}/${h}?grayscale`;
+const fiverrPortfolio = "https://www.fiverr.com/users/ahmedbelhajboub/portfolio";
 
 export const profile = {
   name: "Ahmed Bel Haj Boubaker",
@@ -127,7 +133,7 @@ export const profile = {
     stats: [
       { value: 2, suffix: "+", label: "Years shipping" },
       // `null` renders a placeholder instead of a number
-      { value: 5 as number | null, suffix: "", label: "Products built" },
+      { value: 8 as number | null, suffix: "", label: "Products built" },
     ],
     facts: [
       { label: "Based in", value: "Tunis, Tunisia" },
@@ -157,9 +163,9 @@ export const profile = {
       id: "automation",
       title: "Automation",
       description:
-        "WhatsApp assistants on self-hosted LLMs, and n8n workflows that take repetitive work off people's plates.",
-      tools: ["n8n", "Ollama", "WhatsApp Cloud API", "LLM agents"],
-      logos: ["n8n", "ollama", "whatsapp"],
+        "Voice and WhatsApp agents, document pipelines and n8n workflows that take repetitive work off people's plates.",
+      tools: ["n8n", "LiveKit", "MCP", "WhatsApp Cloud API", "Ollama"],
+      logos: ["n8n", "livekit", "whatsapp"],
     },
   ] satisfies Pillar[],
 
@@ -207,15 +213,25 @@ export const profile = {
       ],
     },
     {
-      title: "DevOps & Automation",
+      title: "DevOps",
       items: [
         { name: "Docker", icon: "docker" },
         { name: "AWS", icon: "aws" },
         { name: "Git", icon: "git" },
         { name: "Vercel", icon: "vercel" },
+      ],
+    },
+    {
+      title: "AI & Automation",
+      items: [
         { name: "n8n", icon: "n8n" },
         { name: "Ollama", icon: "ollama" },
+        { name: "LiveKit", icon: "livekit" },
+        { name: "MCP", icon: "mcp" },
         { name: "WhatsApp API", icon: "whatsapp" },
+        { name: "HubSpot", icon: "hubspot" },
+        { name: "Google Sheets", icon: "googlesheets" },
+        { name: "Telegram", icon: "telegram" },
       ],
     },
   ] satisfies TechCategory[],
@@ -262,8 +278,8 @@ export const profile = {
 
   /**
    * The first project with `featured: true` gets the large card.
-   * Covers and gallery images are grayscale placeholders: swap `src` for real
-   * screenshots (e.g. "/projects/ulysse/cover.jpg" in /public).
+   * Images live in /public/projects/<slug>/. Covers are 16:9 (Ulysse 16:10);
+   * `gallery` is optional: leave it empty to show no screenshots.
    */
   projects: [
     {
@@ -277,7 +293,10 @@ export const profile = {
       featured: true,
       stack: ["React Native", "Expo", "JavaScript", "Qwen", "Ollama", "n8n", "WhatsApp Cloud API"],
       links: {},
-      cover: { src: placeholderImage("abb-ulysse"), alt: "[FILL IN: Ulysse app screenshot]" },
+      cover: {
+        src: "/projects/ulysse/cover.png",
+        alt: "Ulysse app shown on four iPhones: home search, trip countdown, loyalty card and favorites, next to the headline Flight search you can just text.",
+      },
       problem:
         "Searching for flights usually means filling in a form field by field. Ulysse lets travellers ask the way they'd ask a person, “Tunis to Milan on November 22 for two passengers”, on WhatsApp or in the app, and still get exact prices.",
       approach: [
@@ -287,10 +306,54 @@ export const profile = {
       ],
       result:
         "One product across two channels, chat and app, with a travel dashboard that adds trip countdowns, PDF invoices and a loyalty program.",
+      galleryLayout: "phone",
       gallery: [
-        { src: placeholderImage("abb-ulysse-2"), alt: "[FILL IN: Screenshot description]" },
-        { src: placeholderImage("abb-ulysse-3", 1000, 1250), alt: "[FILL IN: Screenshot description]" },
+        {
+          src: "/projects/ulysse/explore.png",
+          alt: "Ulysse home screen: plain-language flight search box, quick filters and the next trip card",
+          caption: "Explore",
+        },
+        {
+          src: "/projects/ulysse/trip.png",
+          alt: "Trip screen: Paris to Tunis boarding pass with a countdown and a step-by-step timeline to departure",
+          caption: "Trip",
+        },
+        {
+          src: "/projects/ulysse/favorites.png",
+          alt: "Favorites screen: saved destinations Lisbon, Rome and New York with price alerts",
+          caption: "Favorites",
+        },
+        {
+          src: "/projects/ulysse/loyalty.png",
+          alt: "Loyalty screen: Gold member card with points, tier progress and Gold benefits",
+          caption: "Loyalty",
+        },
       ],
+    },
+    {
+      slug: "restaurant-phone-agent",
+      title: "AI restaurant phone agent",
+      kind: "Voice AI automation",
+      year: "[FILL IN: Year]",
+      summary:
+        "Answers the phone 24/7, takes food orders and books tables, without inventing a single item, price or slot.",
+      role: "Freelance",
+      stack: ["LiveKit", "n8n", "MCP", "Google Sheets"],
+      links: { fiverr: fiverrPortfolio },
+      cover: {
+        src: "/projects/restaurant-phone-agent/cover.jpg",
+        alt: "Phone showing an AI agent on a call, linked to a verified order card with items and a $20.00 total, headline AI takes the order, 24/7, never wrong",
+      },
+      problem:
+        "Every missed call is a lost order, and staff can't always pick up during a rush or after closing.",
+      approach: [
+        "A voice agent built on LiveKit answers every call, takes food orders and books tables.",
+        "The difference is validation. Every item is checked against the live menu before an order is saved, and prices, totals and order numbers come from the system, never from the model.",
+        "Tables are booked only against real availability, and the customer confirms first. If a write fails, the agent says so instead of faking a confirmation.",
+      ],
+      result:
+        "Orders and bookings land in Google Sheets through n8n and MCP, so there's nothing new for staff to learn.",
+      gallery: [],
     },
     {
       slug: "law-firm-platform",
@@ -302,7 +365,10 @@ export const profile = {
       role: "Full-stack engineer (internship)",
       stack: ["Next.js", "React", "TypeScript", "Prisma", "Supabase", "Tailwind CSS", "AI APIs"],
       links: {},
-      cover: { src: placeholderImage("abb-law-firm", 1200, 900), alt: "[FILL IN: Platform screenshot]" },
+      cover: {
+        src: "/projects/law-firm-platform/cover.jpg",
+        alt: "Laptop showing the law firm platform: a cases table with hearings and statuses, today's agenda and an AI case analysis gauge, headline One platform for the whole firm",
+      },
       problem:
         "A Dubai law firm needed case management, documents, scheduling and client communication in one place, usable in both English and Arabic.",
       approach: [
@@ -311,10 +377,7 @@ export const profile = {
         "The interface is fully bilingual, with complete right-to-left support for Arabic.",
       ],
       result: "[FILL IN: What changed for the firm once the platform was in use.]",
-      gallery: [
-        { src: placeholderImage("abb-law-firm-2", 1000, 1250), alt: "[FILL IN: Screenshot description]" },
-        { src: placeholderImage("abb-law-firm-3"), alt: "[FILL IN: Screenshot description]" },
-      ],
+      gallery: [],
     },
     {
       slug: "hospitality-workforce",
@@ -327,7 +390,10 @@ export const profile = {
       // [FILL IN] Stack taken from the MVPNest role on the CV: confirm for this project
       stack: ["Java", "Spring Boot", "Angular", "TypeScript", "MySQL", "JWT"],
       links: {},
-      cover: { src: placeholderImage("abb-hospitality", 1000, 1250), alt: "[FILL IN: Platform screenshot]" },
+      cover: {
+        src: "/projects/hospitality-workforce/cover.jpg",
+        alt: "Laptop in a hotel lobby showing a request-tracking board with New, In progress and Confirmed columns, headline From phone calls to confirmed bookings",
+      },
       problem:
         "Staffing requests in hospitality were coordinated over phone and email, with no single place to see where a request stood.",
       approach: [
@@ -335,35 +401,56 @@ export const profile = {
         "Underneath: reusable Angular components, REST APIs secured with JWT, and admin dashboards.",
       ],
       result: "Phone and email back-and-forth replaced by one tracked, visible workflow.",
-      gallery: [
-        { src: placeholderImage("abb-hospitality-2"), alt: "[FILL IN: Screenshot description]" },
-        { src: placeholderImage("abb-hospitality-3", 1000, 1250), alt: "[FILL IN: Screenshot description]" },
-      ],
+      gallery: [],
     },
     {
       slug: "real-estate-agent",
-      title: "Real estate sales agent",
+      title: "WhatsApp real estate sales agent",
       kind: "AI automation",
       year: "[FILL IN: Year]",
       summary:
-        "A WhatsApp assistant that answers property inquiries around the clock and hands qualified buyers to the sales team.",
-      role: "[FILL IN: Your role]",
-      // [FILL IN] Add the exact tools (model, hosting, automation) you used
-      stack: ["LLM integration", "WhatsApp automation"],
-      links: {},
-      cover: { src: placeholderImage("abb-real-estate", 1200, 900), alt: "[FILL IN: Assistant screenshot]" },
-      problem:
-        "Property inquiries arrive at all hours, and not every one is ready for a conversation with a sales agent.",
+        "Qualifies buyers, sends property photos, books viewings from the live calendar and pushes warm leads into HubSpot.",
+      role: "Freelance",
+      stack: ["LLM", "WhatsApp Cloud API", "Google Calendar", "HubSpot"],
+      links: { fiverr: fiverrPortfolio },
+      cover: {
+        src: "/projects/real-estate-agent/cover.jpg",
+        alt: "WhatsApp chat where the agent books a Saturday viewing, beside Google Calendar and HubSpot cards, headline Books the viewing while you sleep",
+      },
+      problem: "The agency was losing leads because nobody answered WhatsApp after hours.",
       approach: [
-        "An LLM-based WhatsApp assistant answers questions about listings at any hour.",
-        "It qualifies each lead on budget, preferred location and property type, then recommends matching properties.",
+        "The agent handles the whole conversation: it qualifies buyers naturally, sends property photos, checks the live Google Calendar and books viewings.",
+        "The hard part was trust. The model never sees the seller's minimum price and never works out dates itself. A code layer computes the free slots and the pricing authority before it replies, so it can't invent a discount or double-book.",
       ],
       result:
-        "Viewings are scheduled automatically, and qualified prospects are escalated to a human sales agent.",
-      gallery: [
-        { src: placeholderImage("abb-real-estate-2"), alt: "[FILL IN: Screenshot description]" },
-        { src: placeholderImage("abb-real-estate-3", 1000, 1250), alt: "[FILL IN: Screenshot description]" },
+        "Warm leads land in HubSpot as contacts and deals, and serious offers go to a human.",
+      gallery: [],
+    },
+    {
+      slug: "accounting-documents",
+      title: "Accounting document processing",
+      kind: "AI automation",
+      year: "[FILL IN: Year]",
+      summary:
+        "From client email to verified records: documents are identified, read, classified and matched without manual sorting.",
+      role: "Freelance",
+      // [FILL IN] Add the exact tools (workflow engine, OCR service, model) you used
+      stack: ["OCR", "LLM", "Email automation"],
+      links: { fiverr: fiverrPortfolio },
+      cover: {
+        src: "/projects/accounting-documents/cover.jpg",
+        alt: "Workflow from an email inbox of invoices through OCR, AI classification and matching into accounting records marked Matched",
+      },
+      problem:
+        "Client documents arrive as email attachments, and someone has to sort them, check them and chase whatever is missing.",
+      approach: [
+        "The workflow receives attachments, identifies the client, validates each file and detects duplicates.",
+        "OCR extracts the text, and an AI model classifies each document and pulls out its key data.",
+        "Documents are matched against pending requests, records update automatically, and every event is logged.",
       ],
+      result:
+        "A follow-up system spots missing documents and reminds clients automatically until the required files arrive: less manual work, no missed documents, faster accounting operations.",
+      gallery: [],
     },
     {
       slug: "building-automation-scheduler",
@@ -376,17 +463,41 @@ export const profile = {
       // [FILL IN] Stack taken from the MVPNest role on the CV: confirm for this project
       stack: ["Java", "Spring Boot", "Angular", "TypeScript", "MySQL"],
       links: {},
-      cover: { src: placeholderImage("abb-building", 1200, 900), alt: "[FILL IN: Scheduler screenshot]" },
+      cover: {
+        src: "/projects/building-automation-scheduler/cover.jpg",
+        alt: "Laptop showing the scheduler: annual calendar, weekly template grid and a floor plan with regulation zones, headline Every zone. Every hour. Scheduled.",
+      },
       problem: "[FILL IN: What the client needed to control, and why it was hard before.]",
       approach: [
         "Designed and built a scheduling system supporting annual calendars, weekly templates, daily profiles and regulation zones.",
         "[FILL IN: How the pieces fit together, e.g. how weekly templates roll up into the annual calendar.]",
       ],
       result: "[FILL IN: What changed after launch.]",
-      gallery: [
-        { src: placeholderImage("abb-building-2"), alt: "[FILL IN: Screenshot description]" },
-        { src: placeholderImage("abb-building-3", 1000, 1250), alt: "[FILL IN: Screenshot description]" },
+      gallery: [],
+    },
+    {
+      slug: "linkedin-content-automation",
+      title: "LinkedIn content automation",
+      kind: "AI automation",
+      year: "[FILL IN: Year]",
+      summary:
+        "Finds relevant AI and engineering articles, writes natural LinkedIn posts with an LLM and publishes them on a schedule.",
+      role: "Freelance",
+      // [FILL IN] Add the exact tools (workflow engine, model) you used
+      stack: ["LLM", "LinkedIn API", "Telegram"],
+      links: { fiverr: fiverrPortfolio },
+      cover: {
+        src: "/projects/linkedin-content-automation/cover.jpg",
+        alt: "Three-step workflow: article discovery, AI processing (summarize, rewrite, format) and a published LinkedIn post, with duplicate check and Telegram notification",
+      },
+      problem: "Posting consistently on LinkedIn takes time that most engineers would rather spend building.",
+      approach: [
+        "On a schedule, the workflow finds relevant AI and software engineering articles and skips anything it has already posted.",
+        "An LLM turns each article into a natural LinkedIn post, which is published with the article's original image.",
       ],
+      result:
+        "Every article is recorded to prevent reposts, and a Telegram message confirms each run. No manual publishing.",
+      gallery: [],
     },
   ] satisfies Project[],
 

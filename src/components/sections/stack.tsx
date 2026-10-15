@@ -45,7 +45,7 @@ export function Stack() {
       </BlurFade>
 
       <div className="container-page mt-20">
-        <ul className="grid grid-cols-2 gap-x-6 gap-y-12 md:grid-cols-3 lg:grid-cols-5">
+        <ul className="grid grid-cols-2 gap-x-6 gap-y-12 md:grid-cols-3 lg:grid-cols-6">
           {profile.stack.map((category, i) => (
             <BlurFade as="li" key={category.title} delay={i * 0.06} className="flex flex-col gap-5">
               <h3 className="border-b border-border pb-3 font-mono text-xs tracking-wide text-muted-foreground">
