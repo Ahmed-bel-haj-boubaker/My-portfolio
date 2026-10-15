@@ -1,10 +1,11 @@
 import { ImageResponse } from "next/og"
 
-import { profile } from "@/data/profile"
+import { logoDataUri } from "@/components/logo"
 
 export const size = { width: 180, height: 180 }
 export const contentType = "image/png"
 
+/** Home-screen icon: the mark in off-white on the dark background. */
 export default function AppleIcon() {
   return new ImageResponse(
     (
@@ -18,23 +19,8 @@ export default function AppleIcon() {
           background: "#0a0a0a",
         }}
       >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            width: 128,
-            height: 96,
-            border: "5px solid #3f3f46",
-            borderRadius: 20,
-            color: "#fafafa",
-            fontSize: 50,
-            fontWeight: 700,
-            letterSpacing: "-0.06em",
-          }}
-        >
-          {profile.initials}
-        </div>
+        {/* eslint-disable-next-line @next/next/no-img-element -- rendered by Satori, not the browser */}
+        <img src={logoDataUri("#fafafa", 5.5)} width={120} height={120} alt="" />
       </div>
     ),
     size

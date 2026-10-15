@@ -1,6 +1,6 @@
 import { profile } from "@/data/profile"
 import { visibleSocials } from "@/lib/site"
-import { socialIcons } from "@/components/icons"
+import { SocialIcon } from "@/components/icons"
 import { BackToTop } from "@/components/layout/back-to-top"
 
 async function getYear() {
@@ -23,22 +23,19 @@ export async function Footer() {
 
         <div className="flex items-center gap-2">
           <ul className="flex items-center gap-1">
-            {visibleSocials.map((social) => {
-              const Icon = socialIcons[social.icon]
-              return (
-                <li key={social.label}>
-                  <a
-                    href={social.href}
-                    aria-label={social.label}
-                    target={social.icon === "email" ? undefined : "_blank"}
-                    rel="noopener noreferrer"
-                    className="grid size-10 place-items-center rounded-full text-muted-foreground transition-colors duration-200 hover:bg-muted hover:text-foreground"
-                  >
-                    <Icon className="size-4" aria-hidden />
-                  </a>
-                </li>
-              )
-            })}
+            {visibleSocials.map((social) => (
+              <li key={social.label}>
+                <a
+                  href={social.href}
+                  aria-label={social.label}
+                  target={social.icon === "email" ? undefined : "_blank"}
+                  rel="noopener noreferrer"
+                  className="grid size-10 place-items-center rounded-full text-muted-foreground transition-colors duration-200 hover:bg-muted hover:text-foreground"
+                >
+                  <SocialIcon icon={social.icon} />
+                </a>
+              </li>
+            ))}
           </ul>
           <span aria-hidden className="mx-2 h-6 w-px bg-border" />
           <BackToTop />

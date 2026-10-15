@@ -27,15 +27,21 @@ Components only read from it, so you shouldn't need to touch any component to up
 - Links whose URL is still a placeholder are hidden automatically (GitHub, project
   Live/GitHub links, company links), so the site never ships a dead link.
 - The hero name breaks across two lines using `nameLines`.
-- `stack` is a reasonable full-stack set. Trim it to what you actually use. Each item
+- Content is taken from the CV. `stack` mirrors its Technical Skills section. Each item
   needs an `icon` key from the `TechIcon` type; the logos come from
   [Simple Icons](https://simpleicons.org) and are mapped in `src/components/tech-icon.tsx`.
 - `about.stats`: set `value: null` to show a placeholder, or a number to animate it.
 
 ### Resume
 
-Drop your CV at `public/resume.pdf` (or point `resumeUrl` at a hosted file).
-The navbar and mobile menu link to it.
+The CV lives at `public/Ahmed-Bel-Haj-Boubaker-CV.pdf`. To update it, replace that
+file (keep the name) or point `resumeUrl` at a new one. The navbar and mobile menu link to it.
+
+### Logo
+
+The mark is an SVG in `src/components/logo.tsx` that inherits the text color, so the one
+file covers both themes. The favicon (`src/app/icon.svg`) switches with the browser's
+light/dark setting; the Apple icon and Open Graph image are generated from the same path.
 
 ### Add a project
 
@@ -108,28 +114,19 @@ src/
 
 All in `src/data/profile.ts`:
 
+Profile, experience and education are filled in from the CV. What's left:
+
 **Profile**
 - [ ] `siteUrl`: your production domain
 - [ ] GitHub URL in `socials` (hidden until set)
-- [ ] `about.body[1]`: what you're focused on now, or the team you want next
-- [ ] `about.stats[1].value`: number of projects shipped
-- [ ] `about.facts`: languages you speak
-- [ ] `stack`: confirm or trim the tool list
-- [ ] `public/resume.pdf`: add your CV
+- [ ] Optional: company URLs in `experience` (`companyUrl`) and certifications
 
-**Experience** (two roles, add or remove entries as needed)
-- [ ] Job title, company, company URL, dates, location
-- [ ] 2 to 3 impact bullets per role (with real numbers where you have them)
-- [ ] Tech used per role
-
-**Education and certifications**
-- [ ] Degree, school, years
-- [ ] Certifications (optional; the block hides when the list is empty)
-
-**Projects** (four entries: `web-platform`, `mobile-app`, `automation`, `internal-tool`)
-- [ ] Title, year, one-line outcome, your role
-- [ ] Stack
-- [ ] Live and GitHub links (optional)
-- [ ] Problem, approach (2 paragraphs), result
-- [ ] Cover image and gallery screenshots, with alt text
-- [ ] Rename the slugs to match the real projects
+**Projects**
+- [ ] Real screenshots for every project (covers and galleries are grayscale placeholders),
+      with alt text
+- [ ] Live / GitHub links where they exist (all hidden for now)
+- [ ] Real estate sales agent: year, your role, exact stack
+- [ ] Law firm platform: result after launch
+- [ ] Building automation scheduler: problem, how it fits together, result
+- [ ] Hospitality platform and building scheduler: confirm the stack (copied from the
+      MVPNest role on the CV)

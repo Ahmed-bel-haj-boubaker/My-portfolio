@@ -10,7 +10,7 @@ import { ArrowUpRight, Mail, Menu } from "lucide-react"
 import { profile } from "@/data/profile"
 import { EASE } from "@/lib/motion"
 import { cn } from "@/lib/utils"
-import { Monogram } from "@/components/monogram"
+import { Logo } from "@/components/logo"
 import { SectionLink } from "@/components/section-link"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { Button } from "@/components/ui/button"
@@ -79,13 +79,10 @@ export function Navbar() {
         >
           <SectionLink
             section="top"
-            className="group flex items-center gap-3 rounded-md"
+            className="group -m-1 grid place-items-center rounded-md p-1"
             aria-label={`${profile.name}, back to top`}
           >
-            <Monogram className="transition-colors duration-300 group-hover:border-foreground" />
-            <span className="hidden text-sm font-medium tracking-tight text-muted-foreground transition-colors group-hover:text-foreground lg:inline">
-              {profile.name}
-            </span>
+            <Logo className="size-8 transition-transform duration-500 ease-(--ease-out-expo) group-hover:-rotate-6" />
           </SectionLink>
 
           <ul className="hidden items-center gap-1 md:flex">

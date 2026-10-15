@@ -8,7 +8,7 @@ import { ArrowUp, LayoutGrid, Send, type LucideIcon } from "lucide-react"
 
 import { EASE } from "@/lib/motion"
 import { visibleSocials } from "@/lib/site"
-import { socialIcons } from "@/components/icons"
+import { SocialIcon } from "@/components/icons"
 import { Dock, DockIcon } from "@/components/magicui/dock"
 import { SectionLink } from "@/components/section-link"
 import { ThemeToggle } from "@/components/theme-toggle"
@@ -69,27 +69,24 @@ export function SiteDock() {
 
               <Separator orientation="vertical" className="mx-1 h-6! self-center" />
 
-              {visibleSocials.map((social) => {
-                const Icon = socialIcons[social.icon]
-                return (
-                  <DockIcon key={social.label}>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <a
-                          href={social.href}
-                          aria-label={social.label}
-                          target={social.icon === "email" ? undefined : "_blank"}
-                          rel="noopener noreferrer"
-                          className={itemClass}
-                        >
-                          <Icon className="size-4" aria-hidden />
-                        </a>
-                      </TooltipTrigger>
-                      <TooltipContent sideOffset={10}>{social.label}</TooltipContent>
-                    </Tooltip>
-                  </DockIcon>
-                )
-              })}
+              {visibleSocials.map((social) => (
+                <DockIcon key={social.label}>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <a
+                        href={social.href}
+                        aria-label={social.label}
+                        target={social.icon === "email" ? undefined : "_blank"}
+                        rel="noopener noreferrer"
+                        className={itemClass}
+                      >
+                        <SocialIcon icon={social.icon} />
+                      </a>
+                    </TooltipTrigger>
+                    <TooltipContent sideOffset={10}>{social.label}</TooltipContent>
+                  </Tooltip>
+                </DockIcon>
+              ))}
 
               <Separator orientation="vertical" className="mx-1 h-6! self-center" />
 

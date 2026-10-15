@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <style>
+    .mark { color: #0a0a0a; }
+    @media (prefers-color-scheme: dark) { .mark { color: #fafafa; } }
+  </style>
+  <g class="mark">
+    <path d="M17 24H48C55 24 59 30 59 36C59 42 56 47 52 50L83 77" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="17" cy="24" r="9" fill="currentColor"/>
+    <circle cx="52" cy="50" r="9" fill="currentColor"/>
+    <circle cx="83" cy="77" r="9.5" fill="currentColor"/>
+  </g>
+</svg>

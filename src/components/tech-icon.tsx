@@ -1,60 +1,70 @@
+import { Cloud, type LucideIcon } from "lucide-react"
 import {
+  siAngular,
+  siDjango,
   siDocker,
   siExpo,
   siExpress,
-  siFastapi,
-  siFirebase,
-  siFlutter,
-  siGithubactions,
-  siGraphql,
+  siGit,
   siJavascript,
-  siLinux,
+  siLaravel,
   siMongodb,
+  siMysql,
   siN8n,
-  siNestjs,
   siNextdotjs,
   siNodedotjs,
+  siOllama,
+  siOpenjdk,
+  siPhp,
   siPostgresql,
   siPrisma,
-  siPuppeteer,
   siPython,
   siReact,
-  siRedis,
+  siRedux,
+  siSpringboot,
   siSupabase,
   siTailwindcss,
   siTypescript,
   siVercel,
+  siWhatsapp,
 } from "simple-icons"
 
 import type { TechIcon as TechIconName } from "@/data/profile"
 
 /** Simple Icons path data, keyed by the icon names used in profile.ts. */
-const paths: Record<TechIconName, string> = {
+const paths: Partial<Record<TechIconName, string>> = {
+  angular: siAngular.path,
   react: siReact.path,
   nextjs: siNextdotjs.path,
   typescript: siTypescript.path,
   javascript: siJavascript.path,
   tailwind: siTailwindcss.path,
+  redux: siRedux.path,
+  java: siOpenjdk.path,
+  spring: siSpringboot.path,
   nodejs: siNodedotjs.path,
   express: siExpress.path,
-  nestjs: siNestjs.path,
+  django: siDjango.path,
+  laravel: siLaravel.path,
+  php: siPhp.path,
   python: siPython.path,
-  fastapi: siFastapi.path,
-  graphql: siGraphql.path,
   expo: siExpo.path,
-  flutter: siFlutter.path,
-  docker: siDocker.path,
-  githubactions: siGithubactions.path,
-  n8n: siN8n.path,
-  puppeteer: siPuppeteer.path,
-  linux: siLinux.path,
-  vercel: siVercel.path,
   postgresql: siPostgresql.path,
+  mysql: siMysql.path,
   mongodb: siMongodb.path,
-  redis: siRedis.path,
-  supabase: siSupabase.path,
-  firebase: siFirebase.path,
   prisma: siPrisma.path,
+  supabase: siSupabase.path,
+  docker: siDocker.path,
+  git: siGit.path,
+  vercel: siVercel.path,
+  n8n: siN8n.path,
+  ollama: siOllama.path,
+  whatsapp: siWhatsapp.path,
+}
+
+/** Brands Simple Icons no longer carries (AWS) get a neutral glyph instead. */
+const fallbacks: Partial<Record<TechIconName, LucideIcon>> = {
+  aws: Cloud,
 }
 
 /**
@@ -77,6 +87,9 @@ export function TechIconSprite() {
 
 /** Monochrome brand logo; inherits the current text color. */
 export function TechIcon({ icon, className }: { icon: TechIconName; className?: string }) {
+  const Fallback = fallbacks[icon]
+  if (Fallback) return <Fallback aria-hidden className={className} strokeWidth={1.75} />
+
   return (
     <svg aria-hidden viewBox="0 0 24 24" className={className}>
       <use href={`#tech-${icon}`} />

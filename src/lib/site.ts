@@ -1,4 +1,4 @@
-import { profile } from "@/data/profile"
+import { profile, type Project } from "@/data/profile"
 import { filled } from "@/lib/utils"
 
 /**
@@ -14,14 +14,15 @@ export const siteUrl = (
 
 export const visibleSocials = profile.socials.filter((s) => filled(s.href))
 
-export const featuredProject =
-  profile.projects.find((p) => p.featured) ?? profile.projects[0]
+const projects: Project[] = profile.projects
 
-export function getProject(slug: string) {
-  return profile.projects.find((p) => p.slug === slug)
+export const featuredProject: Project = projects.find((p) => p.featured) ?? projects[0]
+
+export function getProject(slug: string): Project | undefined {
+  return projects.find((p) => p.slug === slug)
 }
 
-export function getNextProject(slug: string) {
-  const i = profile.projects.findIndex((p) => p.slug === slug)
-  return profile.projects[(i + 1) % profile.projects.length]
+export function getNextProject(slug: string): Project {
+  const i = projects.findIndex((p) => p.slug === slug)
+  return projects[(i + 1) % projects.length]
 }

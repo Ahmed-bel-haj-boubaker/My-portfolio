@@ -20,7 +20,9 @@ const personJsonLd = {
   email: `mailto:${profile.email}`,
   jobTitle: `${profile.discipline} ${profile.role}`,
   description: profile.description,
-  address: { "@type": "PostalAddress", addressCountry: "TN" },
+  address: { "@type": "PostalAddress", addressLocality: "Tunis", addressCountry: "TN" },
+  alumniOf: profile.education.map((e) => ({ "@type": "CollegeOrUniversity", name: e.school })),
+  knowsLanguage: ["ar", "fr", "en"],
   knowsAbout: profile.stack.flatMap((c) => c.items.map((t) => t.name)),
   sameAs: visibleSocials.filter((s) => s.icon !== "email").map((s) => s.href),
 }

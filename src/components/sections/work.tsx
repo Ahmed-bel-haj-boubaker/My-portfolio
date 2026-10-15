@@ -4,11 +4,15 @@ import { cn } from "@/lib/utils"
 import { BlurFade } from "@/components/magicui/blur-fade"
 import { ProjectCard } from "@/components/project-card"
 
-/** Asymmetric rhythm for the remaining projects: wide, narrow-offset, wide-shifted. */
+/**
+ * Asymmetric rhythm for the remaining projects, in mirrored pairs:
+ * wide + narrow (dropped), then narrow + wide (dropped).
+ */
 const rhythm = [
   { cell: "md:col-span-7", aspect: "aspect-[4/3]" },
   { cell: "md:col-span-5 md:mt-32", aspect: "aspect-[4/5]" },
-  { cell: "md:col-span-7 md:col-start-6", aspect: "aspect-[16/10]" },
+  { cell: "md:col-span-5", aspect: "aspect-[4/5]" },
+  { cell: "md:col-span-7 md:mt-32", aspect: "aspect-[4/3]" },
 ]
 
 export function Work() {

@@ -2,7 +2,7 @@ import { ArrowUpRight } from "lucide-react"
 
 import { profile } from "@/data/profile"
 import { visibleSocials } from "@/lib/site"
-import { socialIcons } from "@/components/icons"
+import { SocialIcon } from "@/components/icons"
 import { BlurFade } from "@/components/magicui/blur-fade"
 import { ContactForm } from "@/components/sections/contact-form"
 import { ContactHeading } from "@/components/sections/contact-heading"
@@ -25,28 +25,28 @@ export function Contact() {
             <ul className="flex flex-col">
               {visibleSocials
                 .filter((social) => social.icon !== "email")
-                .map((social) => {
-                  const Icon = socialIcons[social.icon]
-                  return (
-                    <li key={social.label}>
-                      <a
-                        href={social.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="group flex items-center justify-between border-b border-border py-4 transition-colors hover:border-border-strong"
-                      >
-                        <span className="flex items-center gap-3">
-                          <Icon className="size-4 text-muted-foreground transition-colors group-hover:text-foreground" aria-hidden />
-                          {social.label}
+                .map((social) => (
+                  <li key={social.label}>
+                    <a
+                      href={social.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group flex items-center justify-between border-b border-border py-4 transition-colors hover:border-border-strong"
+                    >
+                      <span className="flex items-center gap-2">
+                        {/* Fixed slot so labels line up whatever the logo's width */}
+                        <span className="grid w-8 place-items-center text-muted-foreground transition-colors group-hover:text-foreground">
+                          <SocialIcon icon={social.icon} />
                         </span>
-                        <ArrowUpRight
-                          aria-hidden
-                          className="size-4 text-muted-foreground transition-transform duration-300 ease-(--ease-out-expo) group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-foreground"
-                        />
-                      </a>
-                    </li>
-                  )
-                })}
+                        {social.label}
+                      </span>
+                      <ArrowUpRight
+                        aria-hidden
+                        className="size-4 text-muted-foreground transition-transform duration-300 ease-(--ease-out-expo) group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-foreground"
+                      />
+                    </a>
+                  </li>
+                ))}
               <li className="flex items-center justify-between py-4 text-sm text-muted-foreground">
                 <span>{profile.location}</span>
                 <span>{profile.workPreference}</span>

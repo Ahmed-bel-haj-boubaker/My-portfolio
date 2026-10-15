@@ -9,7 +9,7 @@ import { ArrowUpRight } from "lucide-react"
 import { profile } from "@/data/profile"
 import { EASE } from "@/lib/motion"
 import { visibleSocials } from "@/lib/site"
-import { socialIcons } from "@/components/icons"
+import { SocialIcon } from "@/components/icons"
 import { SectionLink, useScrollToSection } from "@/components/section-link"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetDescription, SheetTitle } from "@/components/ui/sheet"
@@ -90,7 +90,6 @@ export function MobileMenuSheet({
             </Button>
             <ul className="flex items-center gap-2">
               {visibleSocials.map((social) => {
-                const Icon = socialIcons[social.icon]
                 return (
                   <li key={social.label}>
                     <a
@@ -100,7 +99,7 @@ export function MobileMenuSheet({
                       rel="noopener noreferrer"
                       className="grid size-11 place-items-center rounded-full border border-border text-muted-foreground transition-colors hover:border-border-strong hover:text-foreground"
                     >
-                      <Icon className="size-4" aria-hidden />
+                      <SocialIcon icon={social.icon} />
                     </a>
                   </li>
                 )

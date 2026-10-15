@@ -24,24 +24,27 @@ export function NumberTicker({ value, delay = 0, className, ...props }: NumberTi
   const springValue = useSpring(motionValue, { damping: 60, stiffness: 100 })
   const isInView = useInView(ref, { once: true, margin: "0px 0px -15% 0px" })
 
+  // Always mirror the spring's *current* value, never a hard-coded 0. Effects
+  // re-run when the page is shown again (Next keeps visited routes mounted),
+  // and by then the spring has already settled on the final value.
   useEffect(() => {
-    if (reduceMotion || !ref.current) return
-    ref.current.textContent = format(0)
-  }, [reduceMotion])
+    const el = ref.current
+    if (!el) return
+    if (reduceMotion) {
+      el.textContent = format(value)
+      return
+    }
+    el.textContent = format(springValue.get())
+    return springValue.on("change", (latest) => {
+      el.textContent = format(latest)
+    })
+  }, [springValue, reduceMotion, value])
 
   useEffect(() => {
     if (!isInView || reduceMotion) return
     const timer = setTimeout(() => motionValue.set(value), delay * 1000)
     return () => clearTimeout(timer)
   }, [motionValue, isInView, delay, value, reduceMotion])
-
-  useEffect(
-    () =>
-      springValue.on("change", (latest) => {
-        if (ref.current) ref.current.textContent = format(latest)
-      }),
-    [springValue]
-  )
 
   return (
     <span ref={ref} className={cn("inline-block tabular-nums", className)} {...props}>
