@@ -74,7 +74,7 @@ export const metadata: Metadata = {
   },
   // Search Console / Bing ownership tokens, set in the environment when you verify the domain
   verification: {
-    google: process.env.GOOGLE_SITE_VERIFICATION,
+    google: process.env.GOOGLE_SITE_VERIFICATION ?? "288yIDcNKSR7OX57pcVmDWqsxk0qIvWBJJ6maom2jlA",
     other: process.env.BING_SITE_VERIFICATION ? { "msvalidate.01": process.env.BING_SITE_VERIFICATION } : undefined,
   },
   category: "technology",
