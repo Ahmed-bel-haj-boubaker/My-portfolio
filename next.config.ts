@@ -1,7 +1,5 @@
 import type { NextConfig } from "next";
 
-const domain = "ahmed-belhaj-boubaker.com";
-
 const nextConfig: NextConfig = {
   cacheComponents: true,
   partialPrefetching: true,
@@ -15,17 +13,8 @@ const nextConfig: NextConfig = {
       },
     },
   },
-  // One canonical host: www permanently redirects to the bare domain
-  async redirects() {
-    return [
-      {
-        source: "/:path*",
-        has: [{ type: "host", value: `www.${domain}` }],
-        destination: `https://${domain}/:path*`,
-        permanent: true,
-      },
-    ];
-  },
+  // www <-> bare-domain redirects live in Vercel (Settings > Domains), not here:
+  // a redirect in both places loops forever.
   async headers() {
     return [
       {

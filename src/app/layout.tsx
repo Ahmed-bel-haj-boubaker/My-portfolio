@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
 
+import { Analytics } from "@vercel/analytics/next"
+
 import { profile } from "@/data/profile"
 import { siteUrl } from "@/lib/site"
 import { Providers } from "@/components/providers"
@@ -109,6 +111,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <Footer />
           <SiteDockLoader />
           <RevealObserver />
+          <Analytics />
         </Providers>
       </body>
     </html>

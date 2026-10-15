@@ -80,9 +80,10 @@ The case study page, sitemap entry and static params are generated from this lis
 3. Add the contact-form env vars under **Settings → Environment Variables**
    (see below), then redeploy.
 4. Under **Settings → Domains**, add `ahmed-belhaj-boubaker.com` and
-   `www.ahmed-belhaj-boubaker.com`. www is redirected to the bare domain by
-   `next.config.ts`, so there is only one canonical host. `siteUrl` in
-   `profile.ts` is already set to it.
+   `www.ahmed-belhaj-boubaker.com`. Make the bare domain the main one and set
+   www to **redirect to** it. Do not also add a redirect in `next.config.ts`: two
+   redirects pointing at each other loop forever. `siteUrl` in `profile.ts` is
+   already set to the bare domain.
 
 ## SEO
 
