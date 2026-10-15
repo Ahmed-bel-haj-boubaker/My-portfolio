@@ -359,3 +359,60 @@ html.lenis body {
     opacity: 0;
   }
 }
+
+/* Contact notification (<ContactToast>) */
+.toast-check {
+  stroke-dasharray: 24;
+  animation: toast-draw 0.5s var(--ease-out-expo) 0.25s both;
+}
+.toast-badge {
+  animation: toast-pop 0.6s var(--ease-out-expo) both;
+}
+.toast-ring {
+  animation: pulse-ring 1.4s var(--ease-out-expo) 0.2s both;
+}
+.toast-line {
+  animation: toast-line 0.7s var(--ease-out-expo) both;
+  animation-delay: var(--line-delay, 0s);
+}
+.toast-progress {
+  transform-origin: left;
+  animation: toast-progress var(--toast-duration, 6s) linear both;
+}
+[data-sonner-toast]:hover .toast-progress {
+  animation-play-state: paused;
+}
+@keyframes toast-draw {
+  from {
+    stroke-dashoffset: 24;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes toast-pop {
+  from {
+    scale: 0.4;
+    opacity: 0;
+  }
+}
+@keyframes toast-line {
+  from {
+    opacity: 0;
+    translate: 0 6px;
+    filter: blur(4px);
+  }
+}
+@keyframes toast-progress {
+  to {
+    transform: scaleX(0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .toast-check,
+  .toast-badge,
+  .toast-ring,
+  .toast-line {
+    animation: none;
+  }
+}

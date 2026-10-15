@@ -80,7 +80,30 @@ The case study page, sitemap entry and static params are generated from this lis
 3. Set `siteUrl` in `profile.ts` to your production domain so canonical URLs,
    the sitemap and Open Graph images use it. Until then, the site falls back to
    Vercel's production URL automatically.
-4. Optional: add your custom domain under **Settings → Domains**.
+4. Add the contact-form env vars under **Settings → Environment Variables**
+   (see below), then redeploy.
+5. Optional: add your custom domain under **Settings → Domains**.
+
+## Contact form (Gmail)
+
+The form posts to a server action (`src/app/actions/contact.ts`) that sends
+through Gmail SMTP with nodemailer (`src/lib/mail.ts`):
+
+- You get the message, with **Reply-To** set to the visitor, so hitting Reply answers them.
+- The visitor gets a short confirmation with a copy of what they sent.
+- The visitor sees a custom success notification (`src/components/contact-toast.tsx`).
+
+Spam protection is a hidden honeypot field plus a limit of 3 messages per IP every 10 minutes.
+
+Copy `.env.example` to `.env` and fill in:
+
+| Variable             | Value                                                                                       |
+| -------------------- | ------------------------------------------------------------------------------------------- |
+| `GMAIL_USER`         | The Gmail address that sends the emails                                                     |
+| `GMAIL_APP_PASSWORD` | A Google **App Password** (Google Account → Security → 2-Step Verification → App passwords) |
+| `CONTACT_TO`         | Optional; where messages land (defaults to `GMAIL_USER`)                                    |
+
+`.env` is git-ignored, so on Vercel the same three variables must be added in the dashboard.
 
 ## Where things are
 
