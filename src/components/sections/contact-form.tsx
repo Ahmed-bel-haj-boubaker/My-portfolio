@@ -32,7 +32,7 @@ function toastContact(props: Omit<React.ComponentProps<typeof ContactToast>, "on
 }
 
 /** Sends through a server action (Gmail SMTP): the message reaches my inbox, the visitor gets a copy. */
-export function ContactForm() {
+export function ContactForm({ topic }: { topic?: string }) {
   const formRef = useRef<HTMLFormElement>(null)
   const [errors, setErrors] = useState<Errors>({})
   const [pending, startTransition] = useTransition()
@@ -107,6 +107,7 @@ export function ContactForm() {
         <label htmlFor="contact-company">Company</label>
         <input id="contact-company" name="company" type="text" tabIndex={-1} autoComplete="off" />
       </div>
+      {topic && <input type="hidden" name="topic" value={topic} />}
       <div className="grid gap-5 sm:grid-cols-2">
         <div className="flex flex-col gap-2">
           <Label htmlFor="contact-name">Name</Label>

@@ -9,18 +9,26 @@ import { ContactHeading } from "@/components/sections/contact-heading"
 import { CopyEmail } from "@/components/sections/copy-email"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
-export function Contact() {
+type ContactProps = {
+  heading?: string
+  intro?: string
+  /** Tagged on the email subject so I know which page the message came from */
+  topic?: string
+}
+
+export function Contact({
+  heading = "Let's work together.",
+  intro = "Have a product to build, an app to ship, or a process that should run itself? Send a few lines about it.",
+  topic,
+}: ContactProps) {
   return (
     <section id="contact" aria-labelledby="contact-title" className="cv-auto py-24 [--cv-size:1100px] md:py-40">
       <div className="container-page">
-        <ContactHeading id="contact-title">Let&apos;s work together.</ContactHeading>
+        <ContactHeading id="contact-title">{heading}</ContactHeading>
 
         <div className="mt-16 grid grid-cols-12 gap-x-6 gap-y-16 md:mt-24">
           <BlurFade className="col-span-12 flex flex-col gap-10 lg:col-span-6">
-            <p className="max-w-[44ch] text-lg leading-relaxed text-muted-foreground">
-              Have a product to build, an app to ship, or a process that should run itself? Send a
-              few lines about it.
-            </p>
+            <p className="max-w-[44ch] text-lg leading-relaxed text-muted-foreground">{intro}</p>
             <CopyEmail />
             <ul className="flex flex-col">
               {visibleSocials
@@ -62,7 +70,7 @@ export function Contact() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <ContactForm />
+                <ContactForm topic={topic} />
               </CardContent>
             </Card>
           </BlurFade>

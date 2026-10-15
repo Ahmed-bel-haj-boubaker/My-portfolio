@@ -41,7 +41,14 @@ export const metadata: Metadata = {
     "web development",
     "mobile development",
     "automation",
+    "AI automation",
+    "WhatsApp AI agent",
+    "AI phone agent",
+    "n8n",
+    "travel agency app",
     "Next.js",
+    "Spring Boot",
+    "Angular",
     "React Native",
     "Tunisia",
     "remote",
@@ -60,7 +67,18 @@ export const metadata: Metadata = {
     title,
     description: profile.description,
   },
-  robots: { index: true, follow: true },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 },
+  },
+  // Search Console / Bing ownership tokens, set in the environment when you verify the domain
+  verification: {
+    google: process.env.GOOGLE_SITE_VERIFICATION,
+    other: process.env.BING_SITE_VERIFICATION ? { "msvalidate.01": process.env.BING_SITE_VERIFICATION } : undefined,
+  },
+  category: "technology",
+  formatDetection: { telephone: false, email: false, address: false },
 }
 
 export const viewport: Viewport = {

@@ -77,12 +77,58 @@ The case study page, sitemap entry and static params are generated from this lis
 1. Push the repo to GitHub.
 2. In Vercel, **Add New → Project**, import the repo. The defaults (Next.js preset,
    `npm run build`) are correct, so no extra settings are needed.
-3. Set `siteUrl` in `profile.ts` to your production domain so canonical URLs,
-   the sitemap and Open Graph images use it. Until then, the site falls back to
-   Vercel's production URL automatically.
-4. Add the contact-form env vars under **Settings → Environment Variables**
+3. Add the contact-form env vars under **Settings → Environment Variables**
    (see below), then redeploy.
-5. Optional: add your custom domain under **Settings → Domains**.
+4. Under **Settings → Domains**, add `ahmed-belhaj-boubaker.com` and
+   `www.ahmed-belhaj-boubaker.com`. www is redirected to the bare domain by
+   `next.config.ts`, so there is only one canonical host. `siteUrl` in
+   `profile.ts` is already set to it.
+
+## SEO
+
+Everything is generated from `profile.ts`, so it stays in sync with the content.
+
+- **Metadata**: one title, description and canonical per page. Project and case-study
+  pages share their cover as the Open Graph and Twitter image (`src/lib/seo.ts`).
+- **Structured data (JSON-LD)**:
+  - Home: WebSite, Person and ProfilePage.
+  - Projects: CreativeWork and BreadcrumbList.
+  - Case studies: Service and BreadcrumbList.
+- **Crawling**: `/sitemap.xml` (with image entries) and `/robots.txt`. AI search
+  crawlers are allowed so the site can be cited in AI answers.
+- **`/llms.txt`**: a Markdown summary for AI assistants.
+- **Real 404s**: `src/proxy.ts` returns a 404 status for unknown project or
+  case-study URLs. Without it, those pages would send a 200 first (a "soft 404").
+- **Headers**: nosniff, referrer policy, frame options, permissions policy and HSTS
+  (`next.config.ts`).
+
+After the domain is live:
+
+1. Verify it in [Google Search Console](https://search.google.com/search-console)
+   and [Bing Webmaster Tools](https://www.bing.com/webmasters).
+   - For the HTML-tag method, put the token in the `GOOGLE_SITE_VERIFICATION` /
+     `BING_SITE_VERIFICATION` env vars and redeploy.
+   - With DNS verification, the env vars aren't needed.
+2. Submit `https://ahmed-belhaj-boubaker.com/sitemap.xml` in both.
+3. Link the site from LinkedIn, Fiverr and GitHub, so search engines connect the
+   profiles to the same person.
+
+### AI search (AEO)
+
+The goal is for ChatGPT, Claude, Perplexity, Gemini and Copilot to know who you are, and to cite the site when they answer.
+
+- **"Quick answers" FAQ on the home page** (`profile.faq`): one self-contained, third-person answer per question, so it can be quoted as is. The same pairs go out as FAQPage structured data. Case-study FAQs do the same.
+- **One identity**: the Person schema carries `alternateNames` (Belhaj / Bel Haj spellings), occupation, degree, skills and your social profiles (`sameAs`).
+- **`/llms.txt`** gives a summary; **`/llms-full.txt`** has the whole site as one Markdown file.
+- **`robots.txt`** explicitly allows the AI search crawlers.
+- **Freshness**: bump `profile.updatedAt` whenever you change the content. It feeds the sitemap and the structured data.
+- **IndexNow**: after each deploy, run `npm run indexnow` to ping Bing with every URL. Bing powers ChatGPT search and Copilot. The key file is in `public/` and must stay there.
+
+What moves AI answers most happens off-site, on the profiles they cross-check:
+
+- Use the same name, title and one-line description on LinkedIn, Fiverr and GitHub, and link back to the site.
+- A GitHub profile README that points to the site, and pinned public repos.
+- Mentions on other sites: client reviews, articles, talks, directories.
 
 ## Contact form (Gmail)
 
@@ -104,6 +150,20 @@ Copy `.env.example` to `.env` and fill in:
 | `CONTACT_TO`         | Optional; where messages land (defaults to `GMAIL_USER`)                                    |
 
 `.env` is git-ignored, so on Vercel the same three variables must be added in the dashboard.
+
+## Case studies
+
+Industry pages live at `/case-studies/<slug>` and are listed in the home-page "Case studies" section. There are three:
+
+- `restaurants`: AI phone agent
+- `real-estate`: WhatsApp sales agent
+- `travel-agencies`: mobile app and website
+
+Each one is an entry in `profile.caseStudies` with these sections: problem, benefits, how it works, why every business needs it, the real build, FAQ, and its own contact heading.
+
+`projects` lists the portfolio slugs that back the page up. The first project's cover becomes the hero image, and a phone gallery is shown when the project has one. Those project pages link back to the case study automatically.
+
+Messages sent from a case-study page arrive with the topic in the subject, e.g. "New message from Sara · Restaurants case study".
 
 ## Where things are
 
@@ -140,7 +200,6 @@ All in `src/data/profile.ts`:
 Profile, experience and education are filled in from the CV. What's left:
 
 **Profile**
-- [ ] `siteUrl`: your production domain
 - [ ] GitHub URL in `socials` (hidden until set)
 - [ ] Optional: company URLs in `experience` (`companyUrl`) and certifications
 

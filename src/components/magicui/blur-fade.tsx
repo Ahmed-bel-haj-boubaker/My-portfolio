@@ -18,6 +18,8 @@ export function BlurFade({ children, className, as: Tag = "div", delay = 0 }: Bl
   return (
     <Tag
       data-reveal=""
+      // <RevealObserver> may add data-revealed before this hydrates (e.g. landing on /#work)
+      suppressHydrationWarning
       className={cn(className)}
       style={delay ? ({ "--reveal-delay": `${delay}s` } as React.CSSProperties) : undefined}
     >

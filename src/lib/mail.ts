@@ -4,7 +4,7 @@ import nodemailer, { type Transporter } from "nodemailer"
 
 import { profile } from "@/data/profile"
 
-export type ContactMessage = { name: string; email: string; message: string }
+export type ContactMessage = { name: string; email: string; message: string; topic?: string }
 
 let transporter: Transporter | undefined
 
@@ -42,7 +42,7 @@ const quote = (text: string) =>
   `<div style="margin:16px 0;padding:16px 20px;border-left:3px solid #0a0a0a;background:#fafafa;border-radius:8px;white-space:pre-wrap">${escape(text)}</div>`
 
 /** Delivers the message to me, then sends the visitor a confirmation copy. */
-export async function sendContactEmails({ name, email, message }: ContactMessage) {
+export async function sendContactEmails({ name, email, message, topic }: ContactMessage) {
   const mailer = getTransporter()
   const user = process.env.GMAIL_USER!
   const to = process.env.CONTACT_TO || user
@@ -52,11 +52,11 @@ export async function sendContactEmails({ name, email, message }: ContactMessage
     from: `"Portfolio contact" <${user}>`,
     to,
     replyTo: { name, address: email },
-    subject: `New message from ${name}`,
+    subject: topic ? `New message from ${name} · ${topic}` : `New message from ${name}`,
     text: `${message}\n\n— ${name} <${email}>`,
     html: layout(
       `New message from ${escape(name)}`,
-      `<p style="margin:0;color:#525252">Reply to this email to answer <a href="mailto:${escape(email)}" style="color:#0a0a0a">${escape(email)}</a> directly.</p>${quote(message)}`
+      `${topic ? `<p style="margin:0 0 8px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#737373">Sent from: ${escape(topic)}</p>` : ""}<p style="margin:0;color:#525252">Reply to this email to answer <a href="mailto:${escape(email)}" style="color:#0a0a0a">${escape(email)}</a> directly.</p>${quote(message)}`
     ),
   })
 

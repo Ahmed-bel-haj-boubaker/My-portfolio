@@ -6,7 +6,8 @@ import { notFound } from "next/navigation"
 import { ArrowLeft, ArrowUpRight } from "lucide-react"
 
 import { profile } from "@/data/profile"
-import { getNextProject, getProject } from "@/lib/site"
+import { getCaseStudyForProject, getNextProject, getProject } from "@/lib/site"
+import { jsonLd, pageMetadata, projectJsonLd } from "@/lib/seo"
 import { cn, filled, isPlaceholder } from "@/lib/utils"
 import { BlurFade } from "@/components/magicui/blur-fade"
 import { ProjectLinks } from "@/components/project-links"
@@ -23,14 +24,13 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   const project = getProject(slug)
   if (!project) return {}
 
-  const title = filled(project.title) ?? project.kind
-  const description = filled(project.summary) ?? `${project.kind} case study by ${profile.name}.`
-  return {
-    title,
-    description,
-    alternates: { canonical: `/projects/${project.slug}` },
-    openGraph: { title, description, url: `/projects/${project.slug}` },
-  }
+  return pageMetadata({
+    title: `${filled(project.title) ?? project.kind}: ${project.kind}`,
+    description: filled(project.summary) ?? `${project.kind} case study by ${profile.name}.`,
+    path: `/projects/${project.slug}`,
+    image: project.cover,
+    type: "article",
+  })
 }
 
 export default function ProjectPage({ params }: { params: Params }) {
@@ -114,6 +114,7 @@ async function ProjectContent({ params }: { params: Params }) {
   if (!project) notFound()
 
   const next = getNextProject(project.slug)
+  const caseStudy = getCaseStudyForProject(project.slug)
   // Placeholder values are left out rather than shown as "[FILL IN ...]"
   const meta = [
     { label: "Role", value: project.role },
@@ -123,6 +124,7 @@ async function ProjectContent({ params }: { params: Params }) {
 
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(projectJsonLd(project))} />
       <article>
         <div className="container-page">
           <header className="mt-10 grid grid-cols-12 gap-x-6 gap-y-8 md:mt-14">
@@ -268,6 +270,33 @@ async function ProjectContent({ params }: { params: Params }) {
               </BlurFade>
             ))}
           </section>
+        )}
+        {caseStudy && (
+          <div className="container-page mt-16 md:mt-24">
+            <BlurFade>
+              <Link
+                href={`/case-studies/${caseStudy.slug}`}
+                prefetch
+                transitionTypes={["page"]}
+                className="group flex flex-col gap-6 rounded-2xl border border-border bg-card p-6 transition-colors hover:border-border-strong md:flex-row md:items-center md:justify-between md:p-10"
+              >
+                <span className="flex flex-col gap-2">
+                  <span className="font-mono text-xs text-muted-foreground">
+                    Case study · {caseStudy.industry}
+                  </span>
+                  <span className="text-2xl font-semibold tracking-[-0.03em] md:text-[2rem]">
+                    {caseStudy.whyTitle}
+                  </span>
+                </span>
+                <span className="grid size-12 shrink-0 place-items-center rounded-full border border-border transition-colors duration-300 group-hover:border-foreground group-hover:bg-foreground group-hover:text-background">
+                  <ArrowUpRight
+                    aria-hidden
+                    className="size-5 transition-transform duration-300 ease-(--ease-out-expo) group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                  />
+                </span>
+              </Link>
+            </BlurFade>
+          </div>
         )}
       </article>
 

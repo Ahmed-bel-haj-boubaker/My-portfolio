@@ -1,31 +1,17 @@
 import { Suspense, ViewTransition } from "react"
 
-import { profile } from "@/data/profile"
-import { siteUrl, visibleSocials } from "@/lib/site"
+import { homeJsonLd, jsonLd } from "@/lib/seo"
 import { About } from "@/components/sections/about"
+import { CaseStudies } from "@/components/sections/case-studies"
 import { Contact } from "@/components/sections/contact"
 import { Experience } from "@/components/sections/experience"
+import { Faq } from "@/components/sections/faq"
 import { Hero } from "@/components/sections/hero"
 import { Services } from "@/components/sections/services"
 import { Stack } from "@/components/sections/stack"
 import { Work } from "@/components/sections/work"
 import { TechIconSprite } from "@/components/tech-icon"
 import { Separator } from "@/components/ui/separator"
-
-const personJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "Person",
-  name: profile.name,
-  url: siteUrl,
-  email: `mailto:${profile.email}`,
-  jobTitle: `${profile.discipline} ${profile.role}`,
-  description: profile.description,
-  address: { "@type": "PostalAddress", addressLocality: "Tunis", addressCountry: "TN" },
-  alumniOf: profile.education.map((e) => ({ "@type": "CollegeOrUniversity", name: e.school })),
-  knowsLanguage: ["ar", "fr", "en"],
-  knowsAbout: profile.stack.flatMap((c) => c.items.map((t) => t.name)),
-  sameAs: visibleSocials.filter((s) => s.icon !== "email").map((s) => s.href),
-}
 
 function Divider() {
   return (
@@ -45,7 +31,7 @@ export default function HomePage() {
       <main id="main" className="flex-1">
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd).replace(/</g, "\\u003c") }}
+          dangerouslySetInnerHTML={jsonLd(homeJsonLd())}
         />
         <TechIconSprite />
         <Hero />
@@ -69,6 +55,14 @@ export default function HomePage() {
         <Divider />
         <Suspense>
           <Work />
+        </Suspense>
+        <Divider />
+        <Suspense>
+          <CaseStudies />
+        </Suspense>
+        <Divider />
+        <Suspense>
+          <Faq />
         </Suspense>
         <Divider />
         <Suspense>

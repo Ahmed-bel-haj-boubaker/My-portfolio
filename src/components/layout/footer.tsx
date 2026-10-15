@@ -1,3 +1,5 @@
+import Link from "next/link"
+
 import { profile } from "@/data/profile"
 import { visibleSocials } from "@/lib/site"
 import { SocialIcon } from "@/components/icons"
@@ -14,11 +16,28 @@ export async function Footer() {
   return (
     <footer className="relative overflow-hidden border-t border-border">
       <div className="container-page flex flex-col gap-10 pt-16 pb-10 md:flex-row md:items-end md:justify-between">
-        <div className="flex flex-col gap-2">
-          <p className="text-sm font-medium">{profile.name}</p>
-          <p className="text-sm text-muted-foreground">
-            © {year}. Built with Next.js.
-          </p>
+        <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-2">
+            <p className="text-sm font-medium">{profile.name}</p>
+            <p className="text-sm text-muted-foreground">
+              © {year}. Built with Next.js.
+            </p>
+          </div>
+          {/* Plain crawlable links to the money pages, from every page */}
+          <nav aria-label="Case studies">
+            <ul className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-muted-foreground">
+              {profile.caseStudies.map((study) => (
+                <li key={study.slug}>
+                  <Link
+                    href={`/case-studies/${study.slug}`}
+                    className="transition-colors hover:text-foreground"
+                  >
+                    {study.solution} for {study.industry.toLowerCase()}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
         </div>
 
         <div className="flex items-center gap-2">

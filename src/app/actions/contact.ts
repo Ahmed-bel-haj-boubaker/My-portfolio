@@ -26,6 +26,8 @@ export async function sendContact(formData: FormData): Promise<ContactResult> {
     email: String(formData.get("email") ?? "").trim(),
     message: String(formData.get("message") ?? "").trim(),
   }
+  // Which page the message came from, e.g. "Restaurants case study"
+  const topic = String(formData.get("topic") ?? "").trim().slice(0, 80)
   const errors = validateContact(data)
   if (Object.keys(errors).length > 0) return { ok: false, errors }
 
@@ -35,7 +37,7 @@ export async function sendContact(formData: FormData): Promise<ContactResult> {
   }
 
   try {
-    await sendContactEmails(data)
+    await sendContactEmails({ ...data, topic })
     return { ok: true, name: data.name.split(" ")[0] }
   } catch (error) {
     console.error("[contact] send failed", error)

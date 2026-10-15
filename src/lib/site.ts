@@ -1,4 +1,4 @@
-import { profile, type Project } from "@/data/profile"
+import { profile, type CaseStudy, type Project } from "@/data/profile"
 import { filled } from "@/lib/utils"
 
 /**
@@ -25,4 +25,20 @@ export function getProject(slug: string): Project | undefined {
 export function getNextProject(slug: string): Project {
   const i = projects.findIndex((p) => p.slug === slug)
   return projects[(i + 1) % projects.length]
+}
+
+const caseStudies: CaseStudy[] = profile.caseStudies
+
+export function getCaseStudy(slug: string): CaseStudy | undefined {
+  return caseStudies.find((c) => c.slug === slug)
+}
+
+export function getNextCaseStudy(slug: string): CaseStudy {
+  const i = caseStudies.findIndex((c) => c.slug === slug)
+  return caseStudies[(i + 1) % caseStudies.length]
+}
+
+/** The industry case study a project backs up, if any. */
+export function getCaseStudyForProject(projectSlug: string): CaseStudy | undefined {
+  return caseStudies.find((c) => c.projects.includes(projectSlug))
 }
